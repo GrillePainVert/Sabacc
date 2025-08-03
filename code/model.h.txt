@@ -1,0 +1,245 @@
+﻿#pragma once
+#include <cstdint>
+#include <iostream>
+#include <vector>
+
+
+//types de jetons d'action
+enum JetonInfluence {
+	JI_INDEFINI = -1,
+	PIOCHE_GRATUITE = 0,		// Piochez sans payer de JETON
+	REMBOURSEMENT_2,			// Récupérez jusqu'à 2 JETONS du POT vers votre RESERVE
+	REMBOURSEMENT_3,			// Récupérez jusqu'à 3 JETONS du POT vers votre RESERVE
+	TARIF_GENERAL,				// Tous les adversaires placent 1 JETON dans leur POT
+	TARIF_CIBLE,				// Un joueur ciblé place 2 JETONS dans son POT
+	EMBARGO,					// Le joueur suivant doit PASSER
+	DEVALORISATION,				// Valeur SYLOPS = 0 jusqu'à la prochaine RESOLUTION
+	IMMUNITE,					// Protection contre tous les JETONS D'ACTION jusqu'à la prochaine RESOLUTION
+	AUDIT_GENERAL,				// Joueurs ayant PASSE placent 2 JETONS dans leur POT
+	AUDIT_CIBLE,				// Un joueur ciblé ayant PASSE place 3 JETONS dans son POT
+	FRAUDE_MAJEURE,				// Valeur IMPOSTEUR = 6 jusqu'à la prochaine RESOLUTION	
+	DETOURNEMENT,				// Prenez 1 JETON du POT de chaque joueur dans votre POT
+	CUISINER_LIVRES,			// Inverse l'ordre des SABACC à la prochaine RESOLUTION
+	EPUISEMENT,					// Un joueur défausse et pioche une nouvelle MAIN
+	TRANSACTION,				// Echangez votre MAIN avec un autre joueur
+	SABACC_PRIME,				// Lance les 2 dés, la valeur choisie devient le meilleur des SABACC
+	NB_JETONS_INFLUENCE
+};
+std::ostream& operator<<(std::ostream& os, const JetonInfluence& j);
+
+//type et valeurs des différentes cartes
+enum Famille {
+	F_INDEFINI=-1,
+	SABLE=0,
+	SANG
+};
+
+enum Carte {
+	C_INDEFINI = -1,
+	SYLOP = 0,
+	C1,
+	C2,
+	C3,
+	C4,
+	C5,
+	C6,
+	IMPOSTEUR,
+	NB_CARTES
+};
+std::ostream& operator<<(std::ostream& os, const Carte& c);
+
+
+// nb et position absolues des joueurs
+enum Position {
+	P_INDEFINI = -1,
+	S = 0, 
+	O,
+	N,
+	E,
+	NB_POSITIONS
+};
+std::ostream& operator<<(std::ostream& os, const Position& p);
+
+enum PRelative {
+	PR_INDEFINI = -1,
+	MOI = 0,
+	GAUCHE,
+	FACE,
+	DROITE,
+	NB_PRELATIVES
+};
+std::ostream& operator<<(std::ostream& os, const PRelative& p);
+
+PRelative abs2rel(const Position p, const Position maPosition);
+Position rel2abs(const PRelative p, const Position maPosition);
+// TODO
+
+
+enum PhaseTour {
+	PHASE_JETON,		// Joue un Jeton d'Influence ou pas
+	PHASE_JETON_SABACC_PRIME_DE, //Phase spéciale tirage et choix du dé pour le JI SABACC PRIME
+	PHASE_PIOCHE,		// Pioche Sang Sable ou passe 
+	PHASE_DEFAUSSE,		// Defausse ou garde carte piochée
+	PHASE_RESOLUTION,	// Tire les dés si nécessaire et choisit pour les Imposteur	
+};
+std::ostream& operator<<(std::ostream& os, const PhaseTour& p);
+
+enum Action {
+	PJ_PASSE = 0,					// ne joue aucun jeton d'influence
+	PJ_PIOCHE_GRATUITE,				// Piochez sans payer de JETON
+	PJ_REMBOURSEMENT_2,				// Récupérez jusqu'à 2 JETONS du POT vers votre RESERVE
+	PJ_REMBOURSEMENT_3,				// Récupérez jusqu'à 3 JETONS du POT vers votre RESERVE
+	PJ_TARIF_GENERAL,				// Tous les adversaires placent 1 JETON dans leur POT
+	PJ_TARIF_CIBLE_G,				// Joueur de gauche place 2 JETONS dans son POT
+	PJ_TARIF_CIBLE_F,				// Joueur en face place 2 JETONS dans son POT	
+	PJ_TARIF_CIBLE_D,				// Joueur à droiteplace 2 JETONS dans son POT		
+	PJ_EMBARGO,						// Le joueur suivant doit PASSER
+	PJ_DEVALORISATION,				// Valeur SYLOPS = 0 jusqu'à la prochaine RESOLUTION
+	PJ_IMMUNITE,					// Protection contre les JETONS D'ACTION jusqu'à la prochaine RESOLUTION
+	PJ_AUDIT_GENERAL,				// Joueurs ayant PASSE placent 2 JETONS dans leur POT
+	PJ_AUDIT_CIBLE_G,				// Joueur à gauche ayant PASSE place 3 JETONS dans son POT
+	PJ_AUDIT_CIBLE_F,				// Joueur en face ayant PASSE place 3 JETONS dans son POT
+	PJ_AUDIT_CIBLE_D,				// Joueur à droite ayant PASSE place 3 JETONS dans son POT
+	PJ_FRAUDE_MAJEURE,				// Valeur IMPOSTEUR = 6 jusqu'à la prochaine RESOLUTION	
+	PJ_DETOURNEMENT,				// Prenez 1 JETON du POT de chaque joueur dans votre POT
+	PJ_CUISINER_LIVRES,				// Inverse l'ordre des SABACC à la prochaine RESOLUTION
+	PJ_EPUISEMENT_G,				// Joueur à gauche défausse et pioche une nouvelle MAIN
+	PJ_EPUISEMENT_F,				// Joueur en face défausse et pioche une nouvelle MAIN
+	PJ_EPUISEMENT_D,				// Joueur à droite défausse et pioche une nouvelle MAIN
+	PJ_TRANSACTION_G,				// Echangez votre MAIN avec joueur à gauche
+	PJ_TRANSACTION_F,				// Echangez votre MAIN avec joueur en face
+	PJ_TRANSACTION_D,				// Echangez votre MAIN avec joueur à droite
+	PJ_SABACC_PRIME,				// Lance les 2 dés, la valeur choisie devient le meilleur des SABACC
+	PJSP_D1,						// Choisit le dé 1 pour SABACC PRIME
+	PJSP_D2,						// Choisit le dé 2 pour SABACC PRIME
+	PP_PIOCHE_PAQUET_SABLE,			// Pioche dans le paquet SABLE
+	PP_PIOCHE_PAQUET_SANG,			// Pioche dans le paquet SANG
+	PP_PIOCHE_DEFAUSSE_SABLE,		// Défausse dans le paquet SABLE
+	PP_PIOCHE_DEFAUSSE_SANG,		// Défausse dans le paquet SANG
+	PP_PASSE,						// Ne pioche pas, passe
+	PD_DEFAUSSE_CARTE_PIOCHEE,		// Défausse la carte piochée
+	PD_GARDE_CARTE_PIOCHEE,			// Garde la carte piochée
+	PR_IMPOSTEUR_SABLE_D1,			// Choisit le Dé 1 pour l'Imposteur Sable
+	PR_IMPOSTEUR_SABLE_D2,			// Choisit le Dé 2 pour l'Imposteur Sable
+	PR_IMPOSTEUR_SANG_D1,			// Choisit le Dé 1 pour l'Imposteur Sang
+	PR_IMPOSTEUR_SANG_D2,			// Choisit le Dé 2 pour l'Imposteur Sang
+
+	NB_ACTIONS
+};
+
+std::ostream& operator<<(std::ostream& os, const Action& action);
+
+// nb Jetons reserve
+const uint32_t RESERVE_TAILLE = 8;
+
+//distribution initiale des paquets
+const uint32_t DISTRIBUTION_PAQUET_INITIAL[NB_CARTES] = { 1,3,3,3,3,3,3,3 };
+
+//générateur de nombres aléatoires
+class PCGAlea {
+private:
+	uint64_t state; // État interne du générateur
+	uint64_t inc;   // Incrément utilisé pour la génération
+
+public:
+	PCGAlea(uint64_t  graine);
+	uint32_t alea();
+	uint32_t aleaInferieurA(uint32_t borne);
+};
+
+
+// paquet de 22 cartes de Kessel Sabacc
+class PaquetSabacc {
+private:
+	uint32_t m_distribution[NB_CARTES];
+	uint32_t m_nbCartesRestantes = 0;
+
+public:
+	void reset();
+	void appliqueDistribution(const uint32_t dist[NB_CARTES]);
+	uint32_t getNbCartes() const;
+	Carte pioche(PCGAlea& rng);
+};
+
+class DefausseSabacc {
+private:
+	Carte cartesDefausse[22];
+	uint32_t nbCartes = 0;
+
+public:
+	void vide();
+	void defausse(Carte c);
+	uint32_t getNbCartes() const;
+	Carte pioche();
+	Carte regarde() const;
+};
+
+class JoueurSabacc {
+public:	
+	Carte m_carteSable = C_INDEFINI;	
+	Carte m_carteSang = C_INDEFINI;
+	Carte m_carteSablePiochee = C_INDEFINI; //si le joueur a pioché et doit défausser, sinon C_INDEFINI
+	Carte m_carteSangPiochee = C_INDEFINI; //si le joueur a pioché et doit défausser, sinon C_INDEFINI
+	JetonInfluence m_jetonsInfluence[3] = { JI_INDEFINI,JI_INDEFINI,JI_INDEFINI};
+	uint32_t m_de1 = 0, m_de2 = 0; //les dés à 6 faces lorsque le joueur les a lancés
+
+	uint32_t m_reserve=0;
+	uint32_t m_pot=0;
+	bool m_aPasseCeTour = false;
+
+	//effets des jetons d'action
+	bool m_doitPasser=false;	//effet de EMBARGO
+	bool m_immunite = false;	//effet de IMMUNITE
+	bool m_piocheGratuite = false; //effet de PIOCHE_GRATUITE
+	
+	bool m_enJeu = false;	//joueur pas encore éliminé
+
+	void tireDes(PCGAlea& rng) { m_de1 = rng.aleaInferieurA(6) + 1; m_de2 = rng.aleaInferieurA(6) + 1; };
+
+	//TODO chaque joueur doit stocker la vision qu'il a des autres joueurs
+	//un paquet de carte sable et sang special qui reflète ma vision des cartes potentiellement restantes (toutes sauf défaussées et ma main)
+	//optionnel: pour chaque autre joueur stocker les cartes possibles en main: soit C_INDEFINI soit la carte si connue
+};
+std::ostream& operator<<(std::ostream& os, const JoueurSabacc& joueur);
+
+
+
+class JeuSabacc {
+
+public:	
+	uint32_t m_manche;	// compte de la manche
+	uint32_t m_tour;	// 3 tours par manche
+	PaquetSabacc m_paquetSable, m_paquetSang;
+	DefausseSabacc m_defausseSable, m_defausseSang;
+	Position m_positionJ1Manche; //pos premier joueur de la manche
+	Position m_positionJActuel;	//pos joueur actuel
+	PhaseTour m_phaseActuelle; //phase actuelle du tour: PHASE_JETON puis PHASE_PIOCHE puis PHASE_DEFAUSSE si necessaire
+
+	JoueurSabacc m_joueurs[NB_POSITIONS]; //donnees des joueurs
+
+	//Jetons d'influence communs
+	JetonInfluence m_jetonsTiresAuSort[3];
+
+	//effets des Jetons d'influence
+	bool m_sylopsAZero;			//effet de DEVALORISATION
+	bool m_imposteurASix;		//effet de FRAUDE_MAJEURE
+	bool m_sabaccInverse;		//effet de CUISINER_LIVRES
+	Carte m_sabaccPrime;		//carte désignée premier des sabacc par SABACC_PRIME
+
+	//fin du jeu
+	bool m_jeuTermine = false; // Indique si la partie est terminée
+	Position m_vainqueur = Position::P_INDEFINI; // Stocke le vainqueur si m_jeuTermine est vrai
+
+	void initJeu(PCGAlea& rng); //reset des scores, jetons et choix influence
+	void initManche(PCGAlea& rng);
+	void initTour();
+
+	void listerActionsLegales(std::vector<Action> &actions) const;
+	bool executeAction(Action& a, PCGAlea& rng);
+	bool finTourJoueurActuel(PCGAlea& rng);
+	bool appliqueResolutionManche();
+};
+
+std::ostream& operator<<(std::ostream& os, const JeuSabacc& jeu);
+
+

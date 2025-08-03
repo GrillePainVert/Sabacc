@@ -1,0 +1,96 @@
+# Sabacc de Kessel - Règles du Jeu
+
+## Matériel et Terminologie
+
+### Cartes
+- **FAMILLE DE CARTES** : Deux couleurs - SANG (rouge) et SABLE (jaune)
+- Chaque FAMILLE contient 22 cartes (44 au total) :
+  - 3 cartes de chaque valeur (1 à 6)
+  - 3 cartes IMPOSTEUR (valeur déterminée par lancer de dés)
+  - 1 carte SYLOPS (prend la valeur de l'autre carte en main)
+- **MAIN DU JOUEUR** : 2 cartes (1 SANG + 1 SABLE)
+- **VALEUR DE LA MAIN** : Différence absolue entre les valeurs des deux cartes
+- **SABACC** : Main où les deux cartes ont la même valeur
+- **SABACC PUR** : Une paire de SYLOPS
+
+### Système d'Économie
+- **JETON** : Monnaie de jeu
+- **RÉSERVE** : Jetons que possède le joueur
+- **POT** : Jetons dépensés pendant la MANCHE en cours
+
+### Autres Éléments
+- **PILE DE PIOCHE** : Cartes face cachée disponibles (une pile par FAMILLE)
+- **PILE DE DÉFAUSSE** : Cartes face visible (une pile par FAMILLE)
+- **JETON D'INFLUENCE** : Capacités spéciales à usage unique (3 par joueur au début)
+
+## Structure du Jeu
+- Le jeu se compose d'une succession de **MANCHES**
+- Chaque **MANCHE** comprend exactement **3 TOURS** suivis d'une **RÉSOLUTION**
+- Le jeu continue jusqu'à ce qu'il ne reste qu'un seul joueur avec une RÉSERVE > 0
+
+## Déroulement du Jeu
+
+### Préparation
+1. **MISE EN PLACE DE LA PARTIE**
+   - Chaque joueur reçoit 8 JETONS dans sa RÉSERVE
+   - Premier joueur désigné au hasard
+   - Chaque joueur reçoit les mêmes 3 JETONS D'INFLUENCE qui ont été tirés au sort en début de partie
+   
+2. **MISE EN PLACE DE LA MANCHE**
+   - Mélangez séparément chaque FAMILLE de cartes
+   - Distribuez 1 carte de chaque FAMILLE à chaque joueur
+   - Placez 1 carte face visible de chaque FAMILLE sur les PILES DE DÉFAUSSE
+   - Premier joueur : aléatoire (1ère manche), puis suivant dans le sens horaire
+
+### Tour de Jeu
+À son tour, chaque joueur (dans le sens horaire) :
+1. Peut jouer un JETON D'INFLUENCE (optionnel)
+2. Doit choisir entre :
+   - **PASSER** : ne rien faire
+   - **PIOCHER** (si au moins 1 JETON en RÉSERVE) :
+     - Placer 1 JETON de sa RÉSERVE dans son POT
+     - Piocher une carte d'une des PILES
+     - Accepter (remplace la carte de même FAMILLE) ou refuser (défausser)
+
+### Phase de RÉSOLUTION (après 3 TOURS)
+1. Révélation des MAINS
+2. Résolution des cartes spéciales (dans cet ordre) :
+   - Paire de SYLOPS (SANG+SABLE) → valeur 0 pour les deux
+   - IMPOSTEUR (SANG puis SABLE) → lancer 2D6, choisir une valeur
+   - SYLOPS (SANG puis SABLE) → prend valeur de l'autre carte
+3. Classement des joueurs :
+   - Par différence croissante entre les 2 cartes de la MAIN.
+   - Si égalité : par SOMME croissante des valeurs des cartes de la MAIN
+4. Conséquences :
+   - 1er rang : récupère tous les JETONS de son POT
+   - Autres rangs avec DIFFERENCE = 0 : perd 1 JETON (RÉSERVE → POT)
+   - Autres rangs avec DIFFERENCE > 0 : perd PÉNALITÉ JETONS (RÉSERVE → POT)
+   - Tous les POT sont ensuite vidés
+5. Élimination :
+   - Joueurs avec RÉSERVE ≤ 0 sont éliminés
+   - Une nouvelle MANCHE commence avec les joueurs restants
+
+## Condition de Victoire
+- Le dernier joueur avec une RÉSERVE > 0 est déclaré vainqueur
+- Le jeu se poursuit en MANCHES successives jusqu'à ce qu'il n'y ait plus qu'un seul joueur
+
+## JETONS D'INFLUENCE (capacités spéciales)
+
+| Nom | Effet |
+|-----|-------|
+| **Pioche Gratuite** | Piochez sans payer de JETON |
+| **Remboursement** | Récupérez jusqu'à 2 JETONS du POT vers votre RÉSERVE |
+| **Remboursement Supplémentaire** | Récupérez jusqu'à 3 JETONS du POT vers votre RÉSERVE |
+| **Tarif Général** | Tous les adversaires placent 1 JETON dans leur POT |
+| **Tarif Ciblé** | Un joueur ciblé place 2 JETONS dans son POT |
+| **Embargo** | Le joueur suivant doit PASSER |
+| **Dévalorisation** | Valeur SYLOPS = 0 jusqu'à la prochaine RÉSOLUTION |
+| **Immunité** | Protection contre les JETONS DE CHANGEMENT jusqu'à la prochaine RÉSOLUTION |
+| **Audit Général** | Joueurs ayant PASSE placent 2 JETONS dans leur POT |
+| **Audit Ciblé** | Un joueur ayant PASSE place 3 JETONS dans son POT |
+| **Fraude Majeure** | Valeur IMPOSTEUR = 6 jusqu'à la prochaine RÉSOLUTION |
+| **Détournement** | Prenez 1 JETON du POT de chaque joueur dans votre POT|
+| **Cuisiner les Livres** | Inverse l'ordre des SABACC à la prochaine RÉSOLUTION |
+| **Épuisement** | Un joueur défausse et pioche une nouvelle MAIN |
+| **Transaction Directe** | Échangez votre MAIN avec un autre joueur |
+| **Sabacc Prime** | Lance les 2 dés, la valeur choisie devient le meilleur des SABACC.
