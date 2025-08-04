@@ -1,5 +1,6 @@
 ﻿#include "types.h"
 
+//Surcharge de l'opérateur << pour JetonInfluence. 
 std::ostream& operator<<(std::ostream& os, const JetonInfluence& j)
 {
     switch (j) {
@@ -24,6 +25,7 @@ std::ostream& operator<<(std::ostream& os, const JetonInfluence& j)
     return os;
 }
 
+//Surcharge de l'opérateur << pour Carte
 std::ostream& operator<<(std::ostream& os, const Carte& c)
 {
     switch (c) {
@@ -40,6 +42,7 @@ std::ostream& operator<<(std::ostream& os, const Carte& c)
     return os;
 }
 
+//Surcharge de l'opérateur << pour Position
 std::ostream& operator<<(std::ostream& os, const Position& p)
 {
     switch (p) {
@@ -52,6 +55,7 @@ std::ostream& operator<<(std::ostream& os, const Position& p)
     return os;
 }
 
+//Surcharge de l'opérateur << pour PRelative
 std::ostream& operator<<(std::ostream& os, const PRelative& p)
 {
     switch (p) {
@@ -65,16 +69,19 @@ std::ostream& operator<<(std::ostream& os, const PRelative& p)
     return os;
 }
 
+//Convertit position absolue en relative
 PRelative abs2rel(const Position p, const Position maPosition)
 {
     return static_cast<PRelative>((p - maPosition + NB_POSITIONS) % NB_POSITIONS);
 }
 
+// Convertit position relative en absolue
 Position rel2abs(const PRelative p, const Position maPosition)
 {
     return static_cast<Position>((p + maPosition) % NB_POSITIONS);
 }
 
+//Surcharge de l'opérateur << pour PhaseTour
 std::ostream& operator<<(std::ostream& os, const PhaseTour& p)
 {
     switch (p) {
@@ -88,6 +95,7 @@ std::ostream& operator<<(std::ostream& os, const PhaseTour& p)
     return os;
 }
 
+//Surcharge de l'opérateur << pour Action
 std::ostream& operator<<(std::ostream& os, const Action& action) {
     switch (action) {
         // --- Actions de la Phase Jeton (PJ_) ---

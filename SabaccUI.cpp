@@ -15,19 +15,19 @@ SabaccUI::SabaccUI() : m_jeu(), m_vue(m_jeu), m_rng(rand())
 	m_jeu.m_joueurs[Position::N].m_type = TYPE_JOUEUR::TJ_MONTE_CARLO_SIMPLE;
 	m_jeu.m_joueurs[Position::E].m_type = TYPE_JOUEUR::TJ_MONTE_CARLO_SIMPLE;
     
-	//m_jeu.initJeu(m_rng);
-    //ouvre la view et lance le thread
+    //lance le thread de la vue qui va la créer
     m_vue.demarre();
 
     LOGDEBUG.setActif(false);
 }
 
+//boucle du thread de l'UI
 void SabaccUI::boucle()
 {    
     while (!m_fermeFenetreDemande) {
         //au tour d'une IA de jouer.
         if (m_jeu.m_joueurs[m_jeu.m_positionJActuel].m_type != TYPE_JOUEUR::TJ_HUMAIN &&
-            !m_jeu.m_jeuTermine && !m_vue.animationEnCours()) {
+            !m_jeu.m_jeuTermine && !m_vue.animationEnCours() && !m_fermeFenetreDemande) {
             
             //choisis action
             Action acChoisie;
@@ -44,15 +44,15 @@ void SabaccUI::boucle()
             m_vue.ajouteAnimationApresAction(acChoisie);
             Sleep(10);
             m_jeu.executeAction(acChoisie, m_rng);
-            while (m_vue.animationEnCours()) Sleep(10);
+            while (m_vue.animationEnCours() && !m_fermeFenetreDemande) Sleep(10);
         }
         
         //Tour d'un humain
-        else if (m_jeu.m_joueurs[m_jeu.m_positionJActuel].m_type == TYPE_JOUEUR::TJ_HUMAIN && !m_jeu.m_jeuTermine && !m_vue.animationEnCours()) {
+        else if (m_jeu.m_joueurs[m_jeu.m_positionJActuel].m_type == TYPE_JOUEUR::TJ_HUMAIN && !m_jeu.m_jeuTermine && !m_vue.animationEnCours() && !m_fermeFenetreDemande) {
             std::vector<Action> legalActions;            
             m_actionJeuChoisie = Action::A_INDEFINIE;
             m_jeu.listerActionsLegales(legalActions);
-            m_vue.definitActionsAChoisir(legalActions);
+            m_vue.definitActionsJeuAChoisir(legalActions);
 
             //attend d'avoir reçu une action choisie et que toutes les animations soient finies
             while (!m_redemarrageDemande && !m_fermeFenetreDemande &&( m_vue.animationEnCours()|| (m_actionJeuChoisie == Action::A_INDEFINIE && m_jeu.m_joueurs[m_jeu.m_positionJActuel].m_type == TYPE_JOUEUR::TJ_HUMAIN && !m_jeu.m_jeuTermine)))
@@ -61,7 +61,7 @@ void SabaccUI::boucle()
             m_actionJeuChoisie = Action::A_INDEFINIE;
             
             if (aChoisie != Action::A_INDEFINIE) {
-                m_vue.videActionsAChoisir();
+                m_vue.videActionsJeuAChoisir();
 
                 m_vue.ajouteLogMessage(aChoisie);
                 m_vue.ajouteAnimationAvantAction(aChoisie);
@@ -194,7 +194,7 @@ void SabaccUI::surFinInitManche()
     m_vue.ajouteAnimationSon(Son::SON_WOOSH);
     m_vue.ajouteGrandMessage(ss.str());
 
-    while (m_vue.animationEnCours())
+    while (m_vue.animationEnCours() && !m_fermeFenetreDemande)
         Sleep(20);
 }
 
@@ -236,6 +236,7 @@ void SabaccUI::surMAJReserveJoueur(Position p, uint32_t reserveActuelle, int del
         m_vue.ajouteLogMessage(ss.str());
         m_vue.ajouteGrandMessage(ss.str());
     }
+    
     //LorexZen joue à Ghost Recon Breakpoint comme à CallOf.
     
     //calcul du score si on est perdant

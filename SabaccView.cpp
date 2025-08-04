@@ -167,17 +167,17 @@ void SabaccVue::boucleThread() {
 
     m_fenetre.create(vm, "Sabacc de Kessel par GrillePainVert", sf::Style::Close | sf::Style::Titlebar, sf::State::Fullscreen, settings);
     m_fenetre.setVerticalSyncEnabled(true);
-    m_fenetre.setMinimumSize(sf::Vector2u(1400, 800));
+    m_fenetre.setFramerateLimit(60);    
     chargeElements();
 
     while (m_fenetre.isOpen() && m_keepRunning) {
         traiteEvenements();
         // update(); // If needed for animations or GUI state not tied to game state
         affiche();
-        Sleep(15);
+        //ici pas besoin de delai Sleep car j'ai fixé la MaxFrameRate à 60 en créant la fenetre
     }
     
-    //unload assets
+    //unload assets pas nécessaire ici
 
     //close window
     m_fenetre.close();
@@ -202,22 +202,13 @@ void SabaccVue::traiteEvenements() {
         // Mouse Button Pressed
         if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>()) {
             if (mouseButtonReleased->button == sf::Mouse::Button::Left) {
-                //todo test
-                //if (m_jeuSabacc.m_jeuTermine || m_jeuSabacc.m_joueurs[m_jeuSabacc.m_positionJActuel].m_type == TYPE_JOUEUR::TJ_HUMAIN || !m_jeuSabacc.m_joueurs[Position::S].m_enJeu) {
-                //if (m_jeuSabacc.m_joueurs[m_jeuSabacc.m_positionJActuel].m_type == TYPE_JOUEUR::TJ_HUMAIN) {
-                    traiteClicJoueur(mouseButtonReleased->position);
-                //}
+                traiteClicJoueur(mouseButtonReleased->position);
             }
         }
-        // Press Enter Event
-        //if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
-        //    if (keyPressed->scancode == sf::Keyboard::Scan::Enter) {
-        //        // This logic needs to be more nuanced.
-        //        // Only advance if waiting for this specific input.
-        //        // For now, let's assume AI turns are fast.
-        //    }
-        //}
-        // catch the resize events
+        
+        //C'est important car le framework SFML affiche une View dont la taille est indépendante de la fenêtre
+        //Ca peut être très utile dans pas mal de cas, mais ici je veux que ma View ait la même résolution que la fenêtre
+        //A chaque resize la View doit être remplacée
         if (const auto* resizedEvent = event->getIf<sf::Event::Resized>())
         {            
             // update the view to the new size of the window
@@ -543,7 +534,7 @@ void SabaccVue::afficheActionsCliquables(const sf::FloatRect& area) {
 
         for (const auto& action : m_actionsAChoisir) {
 
-            ActionCliquable cad(m_policeTexte); // Assuming constructor takes font, or setFont is called
+            BoutonCliquable cad(m_policeTexte); // Assuming constructor takes font, or setFont is called
             cad.gameAction = action;
 
             std::ostringstream actionOss;
@@ -628,7 +619,7 @@ void SabaccVue::afficheActionsCliquables(const sf::FloatRect& area) {
     //Nouveau Jeu
     currentY = area.position.y + area.size.y - buttonHeight;
 
-    ActionCliquable actionNouveauJeu(m_policeTexte);
+    BoutonCliquable actionNouveauJeu(m_policeTexte);
     actionNouveauJeu.ViewAction = VA_NOUVELLE_PARTIE;
     std::string actionStr("Nouvelle Partie");
 
@@ -654,7 +645,7 @@ void SabaccVue::afficheActionsCliquables(const sf::FloatRect& area) {
     currentY -= 1.0f * buttonHeight + 1.0f * padding;
     
     //afficher-cacher cartes
-    ActionCliquable actionAfficherCacher(m_policeTexte);
+    BoutonCliquable actionAfficherCacher(m_policeTexte);
     actionAfficherCacher.ViewAction = VA_AFFICHER_CACHER_CARTES;
     
     actionStr;
@@ -684,7 +675,7 @@ void SabaccVue::afficheActionsCliquables(const sf::FloatRect& area) {
     m_actionsCliquables.push_back(actionAfficherCacher);
 
     //changer la vitesse
-    ActionCliquable actionVitesse(m_policeTexte);
+    BoutonCliquable actionVitesse(m_policeTexte);
     actionVitesse.ViewAction = VA_CHANGE_VITESSE;
 
     actionStr;
@@ -714,7 +705,7 @@ void SabaccVue::afficheActionsCliquables(const sf::FloatRect& area) {
     m_actionsCliquables.push_back(actionVitesse);
 
     //Ferme le jeu
-    ActionCliquable actionFerme(m_policeTexte);
+    BoutonCliquable actionFerme(m_policeTexte);
     actionFerme.ViewAction = VA_FERME;
 
     actionStr="X";
@@ -1066,8 +1057,8 @@ void SabaccVue::traiteClicJoueur(sf::Vector2i mousePos) {
         if (cad.bounds.contains(worldPos)) {
             joueSonBouton();
             Action actionJeu = cad.gameAction;
-            VueAction actionVue = cad.ViewAction;
-            if (actionVue == VueAction::VA_AFFICHER_CACHER_CARTES) {                
+            ActionBouton actionVue = cad.ViewAction;
+            if (actionVue == ActionBouton::VA_AFFICHER_CACHER_CARTES) {                
                 if (!m_afficheCartes && MessageBox(m_fenetre.getNativeHandle(), L"Attention: Afficher les cartes efface les scores. Voulez-vous continuer?", L"Afficher toutes les cartes", MB_YESNO) == IDYES)
                 {
                     m_afficheCartes = true;
@@ -1079,7 +1070,7 @@ void SabaccVue::traiteClicJoueur(sf::Vector2i mousePos) {
 				}
                 return;
             }
-            else if (actionVue == VueAction::VA_NOUVELLE_PARTIE) {
+            else if (actionVue == ActionBouton::VA_NOUVELLE_PARTIE) {
                 //appelle onGameRestart des listeners
                 
                 if (m_jeuSabacc.m_jeuTermine || MessageBox(m_fenetre.getNativeHandle(), L"Voulez-vous vraiment recommencer la partie?", L"Nouvelle Partie", MB_YESNO) == IDYES) {
@@ -1094,7 +1085,7 @@ void SabaccVue::traiteClicJoueur(sf::Vector2i mousePos) {
                 }
                 return;
             }
-            else if (actionVue == VueAction::VA_CHANGE_VITESSE) {
+            else if (actionVue == ActionBouton::VA_CHANGE_VITESSE) {
                 m_rapide = !m_rapide;
                 if (m_rapide) {
                     m_carteAnimDuree = CARTE_ANIM_DUREE_RAPIDE;
@@ -1106,7 +1097,7 @@ void SabaccVue::traiteClicJoueur(sf::Vector2i mousePos) {
                 }                    
                 return;
             }
-            else if(actionVue ==VueAction::VA_FERME) {                
+            else if(actionVue ==ActionBouton::VA_FERME) {                
                 if (MessageBox(m_fenetre.getNativeHandle(), L"Voulez-vous vraiment quitter?", L"Quitter le Jeu", MB_YESNO) == IDYES) 
                     m_pListener->surFermeFenetre();
                 return;
@@ -1120,7 +1111,7 @@ void SabaccVue::traiteClicJoueur(sf::Vector2i mousePos) {
 }
 
 void SabaccVue::ajouteLogMessage(const std::string& message) {
-    if (m_texteMessages.size() >= MAX_MESSAGES) {
+    while (m_texteMessages.size() >= MAX_MESSAGES) {
         m_texteMessages.erase(m_texteMessages.begin());
     }
     sf::Text text(m_policeTexte);
@@ -1398,10 +1389,7 @@ void SabaccVue::affiche() {
 
     afficheCentreTable(boardArea);
 
-    //todo test
-    //if (m_jeuSabacc.m_jeuTermine || m_jeuSabacc.m_joueurs[m_jeuSabacc.m_positionJActuel].m_type == TYPE_JOUEUR::TJ_HUMAIN || !m_jeuSabacc.m_joueurs[Position::S].m_enJeu) {
-        afficheActionsCliquables(actionArea);
-    //}
+    afficheActionsCliquables(actionArea);
   
     afficheMessages(zoneBoiteMessages);
 

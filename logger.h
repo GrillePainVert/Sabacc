@@ -2,8 +2,13 @@
 #include <iostream>
 #include <sstream>
 
-//#define VERBOSE
-
+/**
+ * @class LogDebug
+ * @brief Envoi de messages vers std::cout
+ *
+ * Permet d'afficher des messages niveau debug sur la sortie standard (std::cout)
+ * Activé/désactivé via setActif()
+ */
 class LogDebug {
     bool s_actif;
 public:  
@@ -36,6 +41,13 @@ public:
     }
 };
 
+/**
+ * @class LogWarning
+ * @brief Envoi de messages vers std::cout
+ *
+ * Permet d'afficher des messages niveau warning sur la sortie standard (std::cout)
+ * Toujours actif
+ */
 class LogWarning {
 public:
     LogWarning() {}

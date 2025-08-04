@@ -24,6 +24,7 @@ enum JetonInfluence {
 };
 std::ostream& operator<<(std::ostream& os, const JetonInfluence& j);
 
+//Description des effets des jetons d'influence
 const std::string  DESCRIPTION_JI[NB_JETONS_INFLUENCE] = {
 	u8"Piochez sans payer de jeton",								//	PIOCHE_GRATUITE
 	u8"Récupérez jusqu'à 2 jetons du pot vers votre réserve",		//	REMBOURSEMENT_2
@@ -50,7 +51,7 @@ enum Famille {
 	SANG
 };
 
-//cartes
+//Valeurs possibles des cartes
 enum Carte {
 	C_INDEFINI = -1,
 	SYLOP = 0,
@@ -65,30 +66,29 @@ enum Carte {
 };
 std::ostream& operator<<(std::ostream& os, const Carte& c);
 
-//absolute position around the table
+//Positions absoulues autour de la table
 enum Position {
 	P_INDEFINI = -1,
-	S = 0,
-	O,
-	N,
-	E,
-	NB_POSITIONS
+	S = 0,				//sud
+	O,					//ouest
+	N,					//nord
+	E,					//est
+	NB_POSITIONS		
 };
-
 std::ostream& operator<<(std::ostream& os, const Position& p);
 
-//relative position around the table
+//positions relatives des oposants the table
 enum PRelative {
 	PR_INDEFINI = -1,
 	MOI = 0,
-	GAUCHE,
-	FACE,
-	DROITE,
+	GAUCHE,				//joueur suivant donc +1
+	FACE,				//joueur en face donc +2
+	DROITE,				//joueur à droite donc +3
 	NB_PRELATIVES
 };
 std::ostream& operator<<(std::ostream& os, const PRelative& p);
 
-//conversion abs/relative
+//conversion positions absolues/relative
 PRelative abs2rel(const Position p, const Position maPosition);
 Position rel2abs(const PRelative p, const Position maPosition);
 
@@ -151,14 +151,16 @@ enum Action {
 };
 std::ostream& operator<<(std::ostream& os, const Action& action);
 
+//Types de joueur, permet d'introduire de nouvelles IA.
+//Utilisé dans SabaccUI
 enum TYPE_JOUEUR {
-	TJ_MONTE_CARLO_SIMPLE=0,
-	TJ_MONTE_CARLO_SIMPLE2,
+	TJ_MONTE_CARLO_SIMPLE=0,	
 	TJ_HUMAIN,
 	NB_TYPES_JOUEUR
 };
 
-// tour complet d'un joueur, utilisé pour JeuSabacc pour stocker l'historique pour le NN
+// Structure stockant le tour complet d'un joueur, (pas encore) utilisé 
+// par JeuSabacc pour stocker l'historique des tours précédents si une IA en a besoin
 struct TourJoueur {
 	Position m_positionJoueur;
 	JetonInfluence m_jeton;

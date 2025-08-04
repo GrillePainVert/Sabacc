@@ -442,11 +442,6 @@ void JeuSabacc::initTour() {
         
     m_tour++;
     LOGDEBUG << u8"début tour: " << m_tour << std::endl;
-    //nouveau tour, aucun joueur n'a passé ni pioché
-    // todo test
-    //for (uint32_t i = 0; i < NB_POSITIONS; ++i) {
-    //    m_joueurs[i].m_aPasseCeTour = false;
-    //}
 }
 
 
@@ -480,7 +475,7 @@ void JeuSabacc::appliqueConnaissanceJoueur(Position pj, PCGAlea& rng)
     }
 }
 
-//TODO virer les vecteurs
+
 void JeuSabacc::listerActionsLegales(std::vector<Action>& actions) const
 {
     actions.clear();
@@ -1299,9 +1294,6 @@ bool JeuSabacc::finTourJoueurActuel(PCGAlea& rng)
                 initTour(); // MISE A JOUR: m_tour, reset m_aPasseCeTour
                 // MISE A JOUR: m_phaseActuelle (remis à JETON par initTour implicitement ou explicitement)
                 m_phaseActuelle = PHASE_JETON; // Assure qu'on recommence par la phase jeton
-                // Réinitialise aussi m_doitPasser pour le nouveau tour (sauf si un nouvel embargo est joué)
-                // TODO
-                //for (uint32_t i = 0; i < NB_POSITIONS; ++i) m_joueurs[i].m_doitPasser = false;            
             }
         }
         else {
