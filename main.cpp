@@ -1,4 +1,6 @@
-﻿#include <iostream>
+﻿#define _WIN32_WINNT 0x0602  // Windows 8
+
+#include <iostream>
 #include "windows.h"
 #include "logger.h"
 #include "SabaccUI.h"
