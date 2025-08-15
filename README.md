@@ -20,6 +20,8 @@ J'ai procédé en 3 étapes: d'abord le modèle que j'ai fait tourner en texte d
 SabaccModel et Types contiennent toute la logique du jeu, ce qui permet de gérer l'état du jeu, lister et exécuter les actions possibles.
 PNGAlea est un RNG très rapide.
 Le modèle est conçu pour pouvoir à terme développer une IA à base de réseaux de neurones de type actor-critic: toutes les actions possibles sont dans une enum.
+Le modèle utilise le moins possible de structures dynamiques (Vector...) pour rester rapide. 
+Avec un seul thread sur mon processeur i5 12400 il peut simuler 600 000 parties aléatoires complètes par seconde.
 
 ### IA 
 Eval contient une fonction d'évaluation simple de Monte-Carlo qui permet aux PNJ de choisir une action parmi les actions possibles.
@@ -38,8 +40,28 @@ L'IU utilise le framework SFML.
 SabaccUI est le controleur
 SabaccView est la vue avec son propre thread pour gérer les événements
 
-[Regles Sabacc.txt](https://github.com/user-attachments/files/21791406/Regles.Sabacc.txt)
+### Crédits
+L'image de fond et le design des cartes proviennent du jeu Star Wars Outlaws (propriété Ubisoft)
+
+Sons utilisés:
+
+https://pixabay.com/sound-effects/axe-on-wedge-1-40390/
+
+https://pixabay.com/sound-effects/boxing-bell-signals-6115/
+
+https://pixabay.com/sound-effects/fast-woosh-230497/
+
+https://pixabay.com/sound-effects/woosh-260275/
+
+https://pixabay.com/sound-effects/mouse-click-346047/
+
+https://pixabay.com/sound-effects/flipcard-91468/
+
+https://pixabay.com/sound-effects/shuffleandcardflip1-40942/
+
+
 # Sabacc de Kessel - Règles du Jeu
+[Regles Sabacc.txt](https://github.com/user-attachments/files/21791406/Regles.Sabacc.txt)
 
 ## Matériel et Terminologie
 
