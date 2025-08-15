@@ -1,9 +1,9 @@
 # Jeu de Sabacc Kessel par Grille-Pain Vert 
 <img width="100" height="100" alt="Profil2_sym_100" src="https://github.com/user-attachments/assets/054adb38-98f2-4e5e-8cc3-88546b73944d" /> 
 
-J'ai développé ce jeu au cours de sessions de streaming sur ma chaîne:
+J'ai développé ce jeu au cours de sessions de streaming rapides sur ma chaîne:
 https://www.twitch.tv/grillepainvert
-Aussi, ce code ne suit pas les bonnes pratiques (encapsulation manquante, texte de l'UI en dur dans le code) mais je pense qu'il reste lisible et peut être utile à des personnes qui souhaiteraient voir comment on code un jeu de ce genre.
+Aussi, ce code est loin d'être parfait (encapsulation manquante, texte de l'UI en dur dans le code...) mais je pense qu'il reste lisible et peut être utile à des personnes qui souhaiteraient voir comment on code un jeu de ce genre.
 
 Le Sabacc Kessel est une variante du jeu de cartes Sabacc introduite dans le jeu Star Wars Outlaws de Ubisoft.
 J'ai choisi ce jeu pour développer une petite IA car il est simple, mais présente quelques choix stratégiques.
