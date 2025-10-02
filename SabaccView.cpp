@@ -1059,7 +1059,7 @@ void SabaccVue::traiteClicJoueur(sf::Vector2i mousePos) {
             Action actionJeu = cad.gameAction;
             ActionBouton actionVue = cad.ViewAction;
             if (actionVue == ActionBouton::VA_AFFICHER_CACHER_CARTES) {                
-                if (!m_afficheCartes && MessageBox(m_fenetre.getNativeHandle(), L"Attention: Afficher les cartes efface les scores. Voulez-vous continuer?", L"Afficher toutes les cartes", MB_YESNO) == IDYES)
+                if (!m_afficheCartes && MessageBox(m_fenetre.getNativeHandle(), L"Attention: Afficher les cartes efface les scores. Voulez-vous continuer?", L"Afficher toutes les cartes", MB_YESNO | MB_APPLMODAL) == IDYES)
                 {
                     m_afficheCartes = true;
                     m_suitLesScores = false;
@@ -1073,7 +1073,7 @@ void SabaccVue::traiteClicJoueur(sf::Vector2i mousePos) {
             else if (actionVue == ActionBouton::VA_NOUVELLE_PARTIE) {
                 //appelle onGameRestart des listeners
                 
-                if (m_jeuSabacc.m_jeuTermine || MessageBox(m_fenetre.getNativeHandle(), L"Voulez-vous vraiment recommencer la partie?", L"Nouvelle Partie", MB_YESNO) == IDYES) {
+                if (m_jeuSabacc.m_jeuTermine || MessageBox(m_fenetre.getNativeHandle(), L"Voulez-vous vraiment recommencer la partie?", L"Nouvelle Partie", MB_YESNO | MB_APPLMODAL) == IDYES) {
                         m_pListener->surRedemarreJeu();
                         if(!m_afficheCartes)
                             m_suitLesScores = true;
@@ -1098,7 +1098,7 @@ void SabaccVue::traiteClicJoueur(sf::Vector2i mousePos) {
                 return;
             }
             else if(actionVue ==ActionBouton::VA_FERME) {                
-                if (MessageBox(m_fenetre.getNativeHandle(), L"Voulez-vous vraiment quitter?", L"Quitter le Jeu", MB_YESNO) == IDYES) 
+                if (MessageBox(m_fenetre.getNativeHandle(), L"Voulez-vous vraiment quitter?", L"Quitter le Jeu", MB_YESNO | MB_APPLMODAL) == IDYES)
                     m_pListener->surFermeFenetre();
                 return;
             }

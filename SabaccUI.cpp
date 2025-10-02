@@ -139,7 +139,7 @@ void SabaccUI::surTirageDesAnnonce()
 {
     std::stringstream ss;
     if (m_jeu.m_positionJActuel == Position::S) {
-        MessageBox(m_vue.getFenetre().getNativeHandle(), L"Appuyez pour lancer les dés", L"Lancer de dés", MB_OK);
+        MessageBox(m_vue.getFenetre().getNativeHandle(), L"Appuyez pour lancer les dés", L"Lancer de dés", MB_OK | MB_APPLMODAL);
     }
 }
 
