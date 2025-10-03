@@ -13,6 +13,13 @@ Le score total est la somme des scores des 3 dernières parties.
 
 <img width="1120" height="700" alt="Release Screenshot 2025 08 15 - 10 17 04 69" src="https://github.com/user-attachments/assets/c58d17b5-9186-4497-b59f-26e61a928733" />
 
+## Compiler le projet
+Ce projet utilise le framework SFML pour l'interface graphique.
+
+Après avoir chargé Sabacc, vous devez aussi créer le répertoire SFML-3.0.0 au même niveau que le répertoire Sabacc.
+  
+[version 3.0.0 du framework SFML, 64 bits C++ 17](https://www.sfml-dev.org/fr/download/sfml/3.0.0/)
+
 ## Etapes de développement
 J'ai procédé en 3 étapes: d'abord le modèle que j'ai fait tourner en texte dans la console, puis j'ai rajouté une IA simple, puis l'interface graphique.
 
